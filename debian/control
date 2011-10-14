@@ -1,0 +1,16 @@
+Source: md5name
+Section: perl
+Priority: extra
+Maintainer: David Palmer <palmer@overchat.org>
+Build-Depends: debhelper (>= 7.0.15)
+Standards-Version: 3.7.3
+Homepage: http://www.daybologic.co.uk/
+Vcs-Browser: https://bitbucket.org/daybologic/md5name
+
+Package: md5name
+Architecture: all
+Depends: ${misc:Depends}, ${perl:Depends}
+Description: Tool to convert a directory tree's files into MD5 names.
+ This tool will walk a directory tree, renaming all files to contain MD5
+ checksums as their filenames, eliminating duplicates, and making the
+ structure suitable for a database or hash table.

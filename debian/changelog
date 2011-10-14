@@ -1,0 +1,5 @@
+md5name (1.1.0) stable; urgency=low
+
+  * Add Debian packaging.
+
+ -- David Palmer <palmer@overchat.org>  Fri, 14 Oct 2011 22:46:26 +0100
