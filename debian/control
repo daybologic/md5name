@@ -8,7 +8,7 @@ Homepage: http://www.daybologic.co.uk/
 Vcs-Browser: https://bitbucket.org/daybologic/md5name
 
 Package: md5name
-Architecture: any
+Architecture: all
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${perl:Depends}
 Description: Tool to convert a directory tree's files into MD5 names.
  This tool will walk a directory tree, renaming all files to contain MD5
