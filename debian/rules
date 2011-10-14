@@ -1,0 +1,16 @@
+#!/usr/bin/make -f
+
+clean:
+	dh $@
+
+build:
+	dh --before dh_auto_configure build
+	# Re-generate configure if deleted.
+	if ! [ -f configure ]; then \
+		autoconf; \
+	fi
+	dh_auto_configure -- --enable-stderr --prefix=/usr
+	dh --after dh_auto_configure build
+
+binary:
+	dh $@

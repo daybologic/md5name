@@ -1,0 +1,22 @@
+Source: libdpcrtlmm
+Section: utils
+Priority: extra
+Maintainer: David Palmer <david.palmer@gradwell.com>
+Build-Depends: debhelper (>= 7.0.15), autoconf
+Standards-Version: 3.7.3
+Homepage: http://www.daybologic.co.uk/software.php?content=dpcrtlmm
+Vcs-Browser: http://svn.daybologic.co.uk/trac/dpcrtlmm/
+
+Package: libdpcrtlmm
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Memory management/leak protection library for C apps
+ This library is in its basic form a drop-in replacement for malloc() etc,
+ however it has advanced callbacks and logging facilities which can be used.
+
+Package: libdpcrtlmm-dev
+Architecture: any
+Depends: libdpcrtlmm
+Description: Memory management/lead protection library dev headers
+ This package includes dpcrtlmm.h so that you can compile against
+ libdcprtlmm.
