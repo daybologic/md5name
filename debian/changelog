@@ -1,5 +1,5 @@
-libdpcrtlmm (1.2.0) stable; urgency=low
+md5name (1.1.0) stable; urgency=low
 
-  * Applied Debian packaging to package which was already released at the time.
+  * Add Debian packaging.
 
- -- David Palmer <palmer@overchat.org>  Sun, 14 Nov 2010 09:37:31 +0000
+ -- David Palmer <palmer@overchat.org>  Fri, 14 Oct 2011 22:46:26 +0100
