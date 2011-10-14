@@ -1,5 +1,7 @@
 #!/usr/bin/make -f
 
+PKG_NAME=md5name
+
 clean:
 	dh $@
 
@@ -7,4 +9,8 @@ build:
 	dh $@
 
 binary:
-	dh $@
+	dh --before dh_auto_install binary
+	# Install main script
+	find $(CURDIR)
+	install -cm 0755 md5name.pl $(CURDIR)/debian/$(PKG_NAME)/opt/daybo/bin/
+	dh --remaining binary
