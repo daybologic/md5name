@@ -1,12 +1,7 @@
 #!/usr/bin/perl -w
 #
-# This program iterates through a directory and renames all files
-# in it to their MD5 sums.  This is useful for our porn sites but
-# there is no other use to it because it makes thing harder for
-# humans to find the files they want.  I have made an important
-# modifcation to the code to stop it assuming the directory it is
-# started in should be traversed, which could be disasterous if
-# the execute bit is left on and jobmaster runs the script.
+# MD5Name iterates through a directory and renames all files
+# in it to their MD5 sums.
 #
 
 use Digest::MD5;
