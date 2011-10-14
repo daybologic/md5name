@@ -63,12 +63,8 @@ sub GetExt($)
 
 sub DisallowedExt($)
 {
+	my %disallowed = map { $_ => 1 } ( 'htaccess', 'dirsz', 'txt', 'DS_Store' );
 	my $ext = $_[0];
-	if ( $ext ) {
-		if ( $ext eq 'htaccess' ) { return 1; }
-		if ( $ext eq 'dirsz' ) { return 1; }
-		if ( $ext eq 'txt' ) { return 1; }
-		if ( $ext eq 'DS_Store' ) { return 1; }
-	}
+	return 1 if ( $ext && $disallowed{$ext} );
 	return 0;
 }
