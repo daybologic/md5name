@@ -118,13 +118,18 @@ sub Syntax($$$)
 		's' => 'Don\'t say we\'re renaming files where the result would be the same',
 		'x' => 'Run regular expressions on filenames and skip matches'
 	);
+	my %detail = (
+		'n' => "\tWhen -n is specified, no operations are actually performed,\n" .
+		       "\tThe output is not changed, so it is not possible to tell the difference\n" .
+		       "\tbetween a real-run, and a no-op run.  Other flags are respected.\n"
+	);
 	$overview{'h'} = $overview{'?'}; # Fixup for -h to be the same as -?
 
 	printf("%s -%s\n", $AppName, join(' -', keys(%overview)));
 	$xHelp = AnyInSet(Set => $Args, Excl => [ 'h', '?' ]);
 	print("\n");
 	if ( $xHelp ) {
-		die $xHelp;
+		printf("-%s:\n%s\n", $xHelp, $detail{$xHelp});
 	} else {
 		foreach my $o ( keys(%overview) ) {
 			printf("\t-%s\n\t\t%s\n", $o, $overview{$o});
