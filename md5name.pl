@@ -5,14 +5,15 @@
 #
 
 use Digest::MD5;
+use Getopt::Std;
+
+use constant ARG_LIST => '?hnqsx';
+
+my %Opts = ( );
 
 sub DisallowedExt($);
 sub GetExt($);
 sub Program($);
-
-# Program entry point
-Program($ARGV[0]);
-exit 0;
 
 sub Program($)
 {
@@ -72,3 +73,70 @@ sub DisallowedExt($)
 	}
 	return 0;
 }
+
+sub AnyInSet(@)
+{
+	my $ret = undef;
+	my %Params = ( );
+	my ( $Set, $Excl );
+	%Params = @_ if ( @_ );
+	$Set = $Params{'Set'};
+	$Excl = $Params{'Excl'};
+	die 'Invalid mandatory Set' unless ( $Set && ref($Set) && ref($Set) eq 'HASH' );
+	if ( $Excl ) {
+		die 'Invalid optional Excl' unless ( ref($Excl) && ref($Excl) eq 'ARRAY' );
+	}
+
+	foreach my $member ( keys(%$Set) ) {
+		if ( $Excl ) {
+			my $outerNext = 0;
+			foreach my $x ( @$Excl ) {
+				if ( $member eq $x ) {
+					$outerNext++;
+					last;
+				}
+			}
+			next if ( $outerNext );
+		}
+		if ( $Set->{$member} ) {
+			$ret = $member;
+			last;
+		}
+	}
+	return $ret;
+}
+
+sub Syntax($$$)
+{
+	my $xHelp;
+	my ( $AppName, $ArgList, $Args ) = @_;
+	my %overview = (
+		'?' => 'Display help, use -? with another option for more detailed help',
+		'h' => undef,
+		'n' => 'No-operation, Don\'t modify file-system',
+		'q' => 'Quiet, Do not output to stdout, only write errors on stderr',
+		's' => 'Don\'t say we\'re renaming files where the result would be the same',
+		'x' => 'Run regular expressions on filenames and skip matches'
+	);
+	$overview{'h'} = $overview{'?'}; # Fixup for -h to be the same as -?
+
+	printf("%s -%s\n", $AppName, join(' -', keys(%overview)));
+	$xHelp = AnyInSet(Set => $Args, Excl => [ 'h', '?' ]);
+	print("\n");
+	if ( $xHelp ) {
+		die $xHelp;
+	} else {
+		foreach my $o ( keys(%overview) ) {
+			printf("\t-%s\n\t\t%s\n", $o, $overview{$o});
+		}
+	}
+}
+
+# Program entry point
+getopts(ARG_LIST(), \%Opts);
+if ( $Opts{'?'} || $Opts{'h'} ) {
+	Syntax($0, ARG_LIST(), \%Opts);
+} else {
+	Program($ARGV[0]);
+}
+exit(0);
