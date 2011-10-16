@@ -19,6 +19,13 @@ sub DisallowedExt($);
 sub GetExt($);
 sub Program($);
 
+# Program entry point
+if ( $ARGV[0] ) {
+	Program($ARGV[0]);
+	exit(0);
+}
+printf(STDERR "%s: ERROR processing command-line arguments.\n", $0);
+exit(1);
 sub Program($)
 {
 	my $filename;
