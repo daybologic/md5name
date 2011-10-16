@@ -145,7 +145,9 @@ sub Syntax($$$)
 		printf("-%s:\n%s\n", $xHelp, $detail{$xHelp});
 	} else {
 		foreach my $o ( keys(%overview) ) {
-			printf("\t-%s\n\t\t%s\n", $o, $overview{$o});
+			my $visOpt = '-'.$o;
+			if ( $o eq 'h' ) { next; } elsif ( $o eq '?' ) { $visOpt = '-?/-h'; }
+			printf("\t%s\n\t\t%s\n", $visOpt, $overview{$o});
 		}
 	}
 }
