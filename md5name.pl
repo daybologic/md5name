@@ -14,6 +14,7 @@ use diagnostics;
 use constant ARG_LIST => 'hnqsx';
 
 my %Opts = ( );
+my $RegexMD5 = qr/^[0-9a-f]{32}$/; # Matches MD5 sums
 
 sub DisallowedExt($);
 sub GetExt($);
@@ -32,9 +33,12 @@ sub Program($)
 				Program($dirname . '/' . $filename);
 			} else {
 				my $digest = undef; # The real digest via the MD5 algorithm
-				my $ext = GetExt($filename);
+				my ( $fnMain, $ext ) = GetExt($filename);
 
-				if ( open(my $fileHandle, '<' . $dirname . '/' . $filename) ) {
+				if ( $Opts{'x'} ) { # Use regexes to avoid MD5?
+					$digest = $fnMain if ( $fnMain =~ $RegexMD5 );
+				}
+				if ( !$digest && open(my $fileHandle, '<' . $dirname . '/' . $filename) ) {
 					my $ctx = Digest::MD5->new;
 
 					$ctx->addfile($fileHandle);
