@@ -66,12 +66,13 @@ sub GetExt($)
 {
 	my $fn = $_[0];
 	my @arr;
-	my $ext;
+	my ( $fnMain, $ext );
 
 	@arr = split(m/\./, $fn);
-	$ext = $arr[scalar(@arr)-1];
-	if ( $fn eq $ext ) { return undef; }
-	return $ext;
+	$ext = pop(@arr);
+	$fnMain = pop(@arr);
+	$ext = undef if ( $fn eq $ext ); # Filename has no extension
+	return ( $fnMain, $ext );
 }
 
 sub DisallowedExt($)
