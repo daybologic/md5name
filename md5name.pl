@@ -42,11 +42,14 @@ sub Program($)
 					$digest = $ctx->hexdigest;
 
 					if ( !DisallowedExt($ext) ) {
+						my ( $a, $b );
 						$digest = $digest . '.' . $ext if ( $ext );
-						print "Rename $dirname/$filename to $dirname/$digest\n"
+						$a = "$dirname/$filename";
+						$b = "$dirname/$digest";
+						print "Rename $a to $b\n"
 							unless ( $Opts{'q'} );
-						rename($dirname . '/' . $filename, $dirname . '/' . $digest)
-							unless ( $Opts{'n'} );
+						rename($a, $b)
+							if ( !$Opts{'n'} && $filename ne $digest );
 					}
 				}
 			}
