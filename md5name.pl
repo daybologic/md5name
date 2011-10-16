@@ -31,29 +31,29 @@ sub Program($)
 				print "Recalling Program($dirname/$filename)\n" unless ( $Opts{'q'} );
 				Program($dirname . '/' . $filename);
 			} else {
+				my $digest = undef; # The real digest via the MD5 algorithm
+				my $ext = GetExt($filename);
+
 				if ( open(my $fileHandle, '<' . $dirname . '/' . $filename) ) {
 					my $ctx = Digest::MD5->new;
-					my $digest;
-					my $ext;
 
-					$ext = GetExt($filename);
 					$ctx->addfile($fileHandle);
 					close($fileHandle);
 					$digest = $ctx->hexdigest;
+				}
 
-					if ( !DisallowedExt($ext) ) {
-						my ( $a, $b );
-						$digest = $digest . '.' . $ext if ( $ext );
-						$a = "$dirname/$filename";
-						$b = "$dirname/$digest";
-						unless ( $Opts{'q'} ) {
-							my $doPrint = 1;
-							$doPrint = 0 if ( $Opts{'s'} && $a eq $b );
-							print "Rename $a to $b\n" if ( $doPrint );
-						}
-						rename($a, $b)
-							if ( !$Opts{'n'} && $filename ne $digest );
+				if ( !DisallowedExt($ext) ) {
+					my ( $a, $b );
+					$digest = $digest . '.' . $ext if ( $ext );
+					$a = "$dirname/$filename";
+					$b = "$dirname/$digest";
+					unless ( $Opts{'q'} ) {
+						my $doPrint = 1;
+						$doPrint = 0 if ( $Opts{'s'} && $a eq $b );
+						print "Rename $a to $b\n" if ( $doPrint );
 					}
+					rename($a, $b)
+						if ( !$Opts{'n'} && $filename ne $digest );
 				}
 			}
 		}
