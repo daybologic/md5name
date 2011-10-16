@@ -74,7 +74,7 @@ sub GetExt($)
 
 	@arr = split(m/\./, $fn);
 	$ext = pop(@arr);
-	$fnMain = pop(@arr);
+	$fnMain = join('.', @arr);
 	$ext = undef if ( $fn eq $ext ); # Filename has no extension
 	return ( $fnMain, $ext );
 }
