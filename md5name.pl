@@ -5,6 +5,9 @@
 #
 
 use Digest::MD5;
+use strict;
+use warnings;
+use diagnostics;
 
 sub DisallowedExt($);
 sub GetExt($);
