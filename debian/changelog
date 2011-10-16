@@ -1,3 +1,9 @@
+md5name (1.1.1) stable; urgency=low
+
+  * 37166165b599: Issue 1
+
+ -- David Palmer <palmer@overchat.org>  Sun, 16 Oct 2011 12:56:40 +0100
+
 md5name (1.1.0) stable; urgency=low
 
   * Re-factor internal spaces to tabs
