@@ -8,6 +8,9 @@ use Digest::MD5;
 use Getopt::Std;
 
 use constant ARG_LIST => '?hnqsx';
+use strict;
+use warnings;
+use diagnostics;
 
 my %Opts = ( );
 
@@ -27,14 +30,14 @@ sub Program($)
 				print "Recalling Program($dirname/$filename)\n";
 				Program($dirname . '/' . $filename);
 			} else {
-				if ( open(FILEHANDLE, '<' . $dirname . '/' . $filename) ) {
+				if ( open(my $fileHandle, '<' . $dirname . '/' . $filename) ) {
 					my $ctx = Digest::MD5->new;
 					my $digest;
 					my $ext;
 
 					$ext = GetExt($filename);
-					$ctx->addfile(FILEHANDLE);
-					close(FILEHANDLE);
+					$ctx->addfile($fileHandle);
+					close($fileHandle);
 					$digest = $ctx->hexdigest;
 
 					if ( !DisallowedExt($ext) ) {
