@@ -28,7 +28,7 @@ sub Program($)
 		while ( $filename = readdir(dirHandle) ) {
 			if ( ($filename eq '.') or ($filename eq '..') ) { next; }
 			if ( -d ( $dirname . '/' . $filename ) ) {
-				print "Recalling Program($dirname/$filename)\n";
+				print "Recalling Program($dirname/$filename)\n" unless ( $Opts{'q'} );
 				Program($dirname . '/' . $filename);
 			} else {
 				if ( open(my $fileHandle, '<' . $dirname . '/' . $filename) ) {
@@ -43,7 +43,8 @@ sub Program($)
 
 					if ( !DisallowedExt($ext) ) {
 						$digest = $digest . '.' . $ext if ( $ext );
-						print "Rename $dirname/$filename to $dirname/$digest\n";
+						print "Rename $dirname/$filename to $dirname/$digest\n"
+							unless ( $Opts{'q'} );
 						rename($dirname . '/' . $filename, $dirname . '/' . $digest)
 							unless ( $Opts{'n'} );
 					}
