@@ -19,13 +19,6 @@ sub DisallowedExt($);
 sub GetExt($);
 sub Program($);
 
-# Program entry point
-if ( $ARGV[0] ) {
-	Program($ARGV[0]);
-	exit(0);
-}
-printf(STDERR "%s: ERROR processing command-line arguments.\n", $0);
-exit(1);
 sub Program($)
 {
 	my $filename;
@@ -183,7 +176,12 @@ sub getoptswrapper($$)
 getoptswrapper(ARG_LIST(), \%Opts);
 if ( $Opts{'?'} || $Opts{'h'} ) {
 	Syntax($0, ARG_LIST(), \%Opts);
+	exit(1);
 } else {
-	Program($ARGV[0]);
+	if ( $ARGV[0] ) {
+		Program($ARGV[0]);
+		exit(0);
+	}
+	printf(STDERR "%s: ERROR processing command-line arguments.\n", $0);
+	exit(1);
 }
-exit(0);
