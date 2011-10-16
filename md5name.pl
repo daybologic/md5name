@@ -14,8 +14,12 @@ sub GetExt($);
 sub Program($);
 
 # Program entry point
-Program($ARGV[0]);
-exit 0;
+if ( $ARGV[0] ) {
+	Program($ARGV[0]);
+	exit(0);
+}
+printf(STDERR "%s: ERROR processing command-line arguments.\n", $0);
+exit(1);
 
 sub Program($)
 {
