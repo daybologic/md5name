@@ -44,7 +44,8 @@ sub Program($)
 					if ( !DisallowedExt($ext) ) {
 						$digest = $digest . '.' . $ext if ( $ext );
 						print "Rename $dirname/$filename to $dirname/$digest\n";
-						rename $dirname . '/' . $filename, $dirname . '/' . $digest;
+						rename($dirname . '/' . $filename, $dirname . '/' . $digest)
+							unless ( $Opts{'n'} );
 					}
 				}
 			}
