@@ -157,9 +157,8 @@ sub getoptswrapper($$)
 	my ( $ret, $active ) = ( 0, 1 );
 	my @remaining = ( );
 	my ( $Args, $Opts ) = @_;
-	$ret = getopts($Args, $Opts); # Call the usual getopts() function
 
-	# Now do additional processing to handle -?, which getopts() can't handle.
+	# Do pre-rocessing to handle -?, which getopts() can't handle.
 	foreach my $o ( @ARGV ) {
 		$active = 0 if ( $active && $o eq '--' );
 		if ( $active && $o eq '-?' ) {
@@ -169,6 +168,7 @@ sub getoptswrapper($$)
 		}
 	}
 	@ARGV = @remaining if ( scalar(@remaining) < scalar(@ARGV) );
+	$ret = getopts($Args, $Opts); # Call the usual getopts() function
 	return $ret;
 }
 
