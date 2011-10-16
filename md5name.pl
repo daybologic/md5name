@@ -7,10 +7,11 @@
 use Digest::MD5;
 use Getopt::Std;
 
-use constant ARG_LIST => '?hnqsx';
 use strict;
 use warnings;
 use diagnostics;
+
+use constant ARG_LIST => '?hnqsx';
 
 my %Opts = ( );
 
