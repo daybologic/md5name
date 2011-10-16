@@ -46,8 +46,11 @@ sub Program($)
 						$digest = $digest . '.' . $ext if ( $ext );
 						$a = "$dirname/$filename";
 						$b = "$dirname/$digest";
-						print "Rename $a to $b\n"
-							unless ( $Opts{'q'} );
+						unless ( $Opts{'q'} ) {
+							my $doPrint = 1;
+							$doPrint = 0 if ( $Opts{'s'} && $a eq $b );
+							print "Rename $a to $b\n" if ( $doPrint );
+						}
 						rename($a, $b)
 							if ( !$Opts{'n'} && $filename ne $digest );
 					}
