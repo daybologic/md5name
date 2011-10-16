@@ -1,3 +1,10 @@
+md5name (1.2.0) stable; urgency=low
+
+  * e062eaad8c64: New flags supported: -n, -q, -x, -s
+  * 9d5ee93213e8: Some additional refactoring
+
+ -- David Palmer <palmer@overchat.org>  Sun, 16 Oct 2011 16:33:38 +0100
+
 md5name (1.1.1) stable; urgency=low
 
   * 37166165b599: Issue 1
