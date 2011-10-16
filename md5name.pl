@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use diagnostics;
 
-use constant ARG_LIST => '?hnqsx';
+use constant ARG_LIST => 'hnqsx';
 
 my %Opts = ( );
 
@@ -152,8 +152,28 @@ sub Syntax($$$)
 	}
 }
 
+sub getoptswrapper($$)
+{
+	my ( $ret, $active ) = ( 0, 1 );
+	my @remaining = ( );
+	my ( $Args, $Opts ) = @_;
+	$ret = getopts($Args, $Opts); # Call the usual getopts() function
+
+	# Now do additional processing to handle -?, which getopts() can't handle.
+	foreach my $o ( @ARGV ) {
+		$active = 0 if ( $active && $o eq '--' );
+		if ( $active && $o eq '-?' ) {
+			$Opts->{'?'} = 1;
+		} else {
+			push(@remaining, $o);
+		}
+	}
+	@ARGV = @remaining if ( scalar(@remaining) < scalar(@ARGV) );
+	return $ret;
+}
+
 # Program entry point
-getopts(ARG_LIST(), \%Opts);
+getoptswrapper(ARG_LIST(), \%Opts);
 if ( $Opts{'?'} || $Opts{'h'} ) {
 	Syntax($0, ARG_LIST(), \%Opts);
 } else {
