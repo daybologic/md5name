@@ -38,7 +38,7 @@ sub Program($)
 				if ( $Opts{'x'} ) { # Use regexes to avoid MD5?
 					$digest = $fnMain if ( $fnMain =~ $RegexMD5 );
 				}
-				if ( !$digest && open(my $fileHandle, '<' . $dirname . '/' . $filename) ) {
+				if ( !$digest && open(my $fileHandle, '<', $dirname . '/' . $filename) ) {
 					my $ctx = Digest::MD5->new;
 
 					$ctx->addfile($fileHandle);
