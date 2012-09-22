@@ -1,3 +1,9 @@
+md5name (1.2.1) stable; urgency=low
+
+  * 6b326396aadc: SECURITY: Use the 3-argument open() syntax.
+
+ -- David Palmer <palmer@overchat.org>  Sat, 22 Sep 2012 08:27:45 +0100
+
 md5name (1.2.0) stable; urgency=low
 
   * e062eaad8c64: New flags supported: -n, -q, -x, -s
