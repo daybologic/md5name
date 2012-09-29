@@ -49,7 +49,7 @@ sub Program($)
 						} else {
 							my $user_salt_ctx = Digest::MD5->new;
 							$user_salt_ctx->add($Opts{'S'});
-							$ctx->add($ctx->hexdigest());
+							$ctx->add($user_salt_ctx->hexdigest());
 						}
 					}
 					$digest = $ctx->hexdigest;
