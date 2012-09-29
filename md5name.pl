@@ -15,6 +15,7 @@ use constant ARG_LIST => 'hnqsxS:';
 
 my %Opts = ( );
 my $RegexMD5 = qr/^[0-9a-f]{32}$/; # Matches MD5 sums
+my $UserSalt = '';
 
 sub DisallowedExt($);
 sub GetExt($);
@@ -43,15 +44,7 @@ sub Program($)
 
 					$ctx->addfile($fileHandle);
 					close($fileHandle);
-					if ( $Opts{'S'} ) { # User-supplied salt?
-						if ( $Opts{'S'} =~ $RegexMD5 ) { # It's a direct MD5 sum
-							$ctx->add($Opts{'S'});
-						} else {
-							my $user_salt_ctx = Digest::MD5->new;
-							$user_salt_ctx->add($Opts{'S'});
-							$ctx->add($user_salt_ctx->hexdigest());
-						}
-					}
+					$ctx->add($UserSalt) if ( $UserSalt );
 					$digest = $ctx->hexdigest;
 				}
 
@@ -204,6 +197,15 @@ if ( $Opts{'?'} || $Opts{'h'} ) {
 	Syntax($0, ARG_LIST(), \%Opts);
 	exit(1);
 } else {
+	if ( $Opts{'S'} ) { # User-supplied salt?
+		if ( $Opts{'S'} =~ $RegexMD5 ) { # It's a direct MD5 sum
+			$UserSalt = $Opts{'S'};
+		} else {
+			my $user_salt_ctx = Digest::MD5->new;
+			$user_salt_ctx->add($Opts{'S'});
+			$UserSalt = $user_salt_ctx->hexdigest();
+		}
+	}
 	if ( $ARGV[0] ) {
 		Program($ARGV[0]);
 		exit(0);
