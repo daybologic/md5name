@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use diagnostics;
 
-use constant ARG_LIST => 'hnqsx';
+use constant ARG_LIST => 'hnqsxS:';
 
 my %Opts = ( );
 my $RegexMD5 = qr/^[0-9a-f]{32}$/; # Matches MD5 sums
@@ -129,7 +129,8 @@ sub Syntax($$$)
 		'n' => 'No-operation, Don\'t modify file-system',
 		'q' => 'Quiet, Do not output to stdout, only write errors on stderr',
 		's' => 'Don\'t say we\'re renaming files where the result would be the same',
-		'x' => 'Run regular expressions on filenames and skip matches'
+		'x' => 'Run regular expressions on filenames and skip matches',
+		'S' => 'Obfuscate filenames using a user-defined salt (MD5 or string)'
 	);
 	my %detail = (
 		'n' => "\tWhen -n is specified, no operations are actually performed,\n" .
@@ -146,7 +147,11 @@ sub Syntax($$$)
 		'x' => "\tAssume if a filename looks like an MD5 sum already, that it is,\n" .
 		       "\tthis will lead to massive optimisation when regularly re-processing\n" .
 		       "\ta large data set.  It is then recommended you very occasionally turn the\n" .
-		       "\tflag off to pick up files which have incorrect checksums.\n"
+		       "\tflag off to pick up files which have incorrect checksums.\n",
+
+		'S' => "\tConsider a user-defined string (MD5'ed) or a direct MD5 string as part\n" .
+		       "\tof the MD5 calculation.  This ensures that people cannot use a search engine\n" .
+		       "\tto discover what the file is, if others hold a copy of the file.\n"
 	);
 	$overview{'h'} = $overview{'?'}; # Fixup for -h to be the same as -?
 
