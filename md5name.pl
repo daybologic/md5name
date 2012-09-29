@@ -43,6 +43,15 @@ sub Program($)
 
 					$ctx->addfile($fileHandle);
 					close($fileHandle);
+					if ( $Opts{'S'} ) { # User-supplied salt?
+						if ( $Opts{'S'} =~ $RegexMD5 ) { # It's a direct MD5 sum
+							$ctx->add($Opts{'S'});
+						} else {
+							my $user_salt_ctx = Digest::MD5->new;
+							$user_salt_ctx->add($Opts{'S'});
+							$ctx->add($ctx->hexdigest());
+						}
+					}
 					$digest = $ctx->hexdigest;
 				}
 
