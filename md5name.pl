@@ -111,7 +111,7 @@ sub AnyInSet(@)
 			}
 			next if ( $outerNext );
 		}
-		if ( $Set->{$member} ) {
+		if ( exists($Set->{$member}) ) {
 			$ret = $member;
 			last;
 		}
