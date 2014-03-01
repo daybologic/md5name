@@ -7,7 +7,7 @@ require 't/subtests.pl';
 
 package main;
 use Data::Dumper;
-use Test::More tests => 16;
+use Test::More tests => 21;
 
 sub t_GetExt() {
 	my %tData = (
@@ -42,6 +42,7 @@ sub t_DisallowedExt() {
 sub t_AnyInSet() {
 
 	subtests_AnyInSet_Set();
+	subtests_AnyInSet_Excl();
 }
 
 sub t_main() {
