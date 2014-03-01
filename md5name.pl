@@ -72,6 +72,7 @@ sub GetExt($) {
 	my @arr;
 	my ( $fnMain, $ext );
 
+	return undef if ( !defined($fn) );
 	@arr = split(m/\./, $fn);
 	$ext = pop(@arr);
 	$fnMain = join('.', @arr);
