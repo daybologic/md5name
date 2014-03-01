@@ -6,7 +6,7 @@ require 'md5name.pl';
 
 package main;
 use Data::Dumper;
-use Test::More tests => 11;
+use Test::More tests => 16;
 
 sub t_GetExt() {
 	my %tData = (
@@ -38,9 +38,34 @@ sub t_DisallowedExt() {
 	is(DisallowedExt(undef), 0, 'DisallowedExt(undef)');
 }
 
+sub t_AnyInSet() {
+	my $rxSet = qr/^Invalid mandatory Set /;
+	eval {
+		AnyInSet();
+	};
+	like($@, $rxSet, 'AnyInSet ' . $rxSet);
+	eval {
+		AnyInSet(Set => undef);
+	};
+	like($@, $rxSet, 'AnyInSet ' . $rxSet);
+	eval {
+		AnyInSet(Set => 1);
+	};
+	like($@, $rxSet, 'AnyInSet ' . $rxSet);
+	eval {
+		AnyInSet(Set => []);
+	};
+	like($@, $rxSet, 'AnyInSet ' . $rxSet);
+	eval {
+		AnyInSet(Set => {});
+	};
+	is($@, '', 'AnyInSet');
+}
+
 sub t_main() {
 	t_GetExt();
 	t_DisallowedExt();
+	t_AnyInSet();
 	return 0;
 }
 
