@@ -5,12 +5,13 @@ use strict;
 require 'md5name.pl';
 
 package main;
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 sub t_GetExt() {
 	my %tData = (
 		'blah.file' => 'file',
-		'blah'      => undef
+		'blah'      => undef,
+		'file.'     => ''
 	);
 
 	while ( my ( $file, $ext ) = each(%tData) ) {
