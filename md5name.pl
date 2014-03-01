@@ -209,5 +209,5 @@ sub main() {
 	}
 }
 
-exit(main()); # Program entry point
+exit(main()) unless (caller()); # Program entry point
 1;
