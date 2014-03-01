@@ -5,17 +5,19 @@ use strict;
 require 'md5name.pl';
 
 package main;
+use Data::Dumper;
 use Test::More tests => 3;
 
 sub t_GetExt() {
 	my %tData = (
-		'blah.file' => 'file',
-		'blah'      => undef,
-		'file.'     => ''
+		'blah.file' => [ 'blah', 'file'],
+		'blah'      => [ '', undef ],
+		'file.'     => [ '', 'file' ],
 	);
 
 	while ( my ( $file, $ext ) = each(%tData) ) {
-		is(GetExt($file), $ext, sprintf('GetExt(\'%s\'): %s', $file, $ext));
+		my @ret = GetExt($file);
+		is_deeply(\@ret, $ext, sprintf('GetExt(\'%s\'): %s', $file, join(',', @$ext)));
 	}
 }
 
