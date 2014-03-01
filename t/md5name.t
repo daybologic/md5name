@@ -41,6 +41,7 @@ sub t_DisallowedExt() {
 sub t_main() {
 	t_GetExt();
 	t_DisallowedExt();
+	return 0;
 }
 
 exit(t_main()); # Entry into test routines
