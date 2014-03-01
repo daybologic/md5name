@@ -5,10 +5,21 @@ use strict;
 require 'md5name.pl';
 
 package main;
-use Test::More tests => 1;
+use Test::More tests => 2;
+
+sub t_GetExt() {
+	my %tData = (
+		'blah.file' => 'file',
+		'blah'      => undef
+	);
+
+	while ( my ( $file, $ext ) = each(%tData) ) {
+		is(GetExt($file), $ext, sprintf('GetExt(\'%s\'): %s', $file, $ext));
+	}
+}
 
 sub t_main() {
-	GetExt();
+	t_GetExt();
 }
 
 exit(t_main()); # Entry into test routines
