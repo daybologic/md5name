@@ -3,6 +3,7 @@
 use strict;
 
 require 'md5name.pl';
+require 't/subtests.pl';
 
 package main;
 use Data::Dumper;
@@ -39,27 +40,8 @@ sub t_DisallowedExt() {
 }
 
 sub t_AnyInSet() {
-	my $rxSet = qr/^Invalid mandatory Set /;
-	eval {
-		AnyInSet();
-	};
-	like($@, $rxSet, 'AnyInSet ' . $rxSet);
-	eval {
-		AnyInSet(Set => undef);
-	};
-	like($@, $rxSet, 'AnyInSet ' . $rxSet);
-	eval {
-		AnyInSet(Set => 1);
-	};
-	like($@, $rxSet, 'AnyInSet ' . $rxSet);
-	eval {
-		AnyInSet(Set => []);
-	};
-	like($@, $rxSet, 'AnyInSet ' . $rxSet);
-	eval {
-		AnyInSet(Set => {});
-	};
-	is($@, '', 'AnyInSet');
+
+	subtests_AnyInSet_Set();
 }
 
 sub t_main() {
