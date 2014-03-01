@@ -120,7 +120,7 @@ sub AnyInSet(@) {
 
 sub Syntax($$$) {
 	my $xHelp;
-	my ( $AppName, $ArgList, $Args ) = @_;
+	my ( $AppName, $ArgList, $Args ) = @_; # FIXME: ArgList not used?
 	my %overview = (
 		'?' => 'Display help, use -? with another option for more detailed help',
 		'h' => undef,
