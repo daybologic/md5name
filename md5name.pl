@@ -185,25 +185,29 @@ sub getoptswrapper($$) {
 	return $ret;
 }
 
-# Program entry point
-getoptswrapper(ARG_LIST(), \%Opts);
-if ( $Opts{'?'} || $Opts{'h'} ) {
-	Syntax($0, ARG_LIST(), \%Opts);
-	exit(1);
-} else {
-	if ( $Opts{'S'} ) { # User-supplied salt?
-		if ( $Opts{'S'} =~ $RegexMD5 ) { # It's a direct MD5 sum
-			$UserSalt = $Opts{'S'};
-		} else {
-			my $user_salt_ctx = Digest::MD5->new;
-			$user_salt_ctx->add($Opts{'S'});
-			$UserSalt = $user_salt_ctx->hexdigest();
+sub main() {
+	getoptswrapper(ARG_LIST(), \%Opts);
+	if ( $Opts{'?'} || $Opts{'h'} ) {
+		Syntax($0, ARG_LIST(), \%Opts);
+		return 1;
+	} else {
+		if ( $Opts{'S'} ) { # User-supplied salt?
+			if ( $Opts{'S'} =~ $RegexMD5 ) { # It's a direct MD5 sum
+				$UserSalt = $Opts{'S'};
+			} else {
+				my $user_salt_ctx = Digest::MD5->new;
+				$user_salt_ctx->add($Opts{'S'});
+				$UserSalt = $user_salt_ctx->hexdigest();
+			}
 		}
+		if ( $ARGV[0] ) {
+			Program($ARGV[0]);
+			return 0;
+		}
+		printf(STDERR "%s: ERROR processing command-line arguments.\n", $0);
+		return 1;
 	}
-	if ( $ARGV[0] ) {
-		Program($ARGV[0]);
-		exit(0);
-	}
-	printf(STDERR "%s: ERROR processing command-line arguments.\n", $0);
-	exit(1);
 }
+
+exit(main()); # Program entry point
+1;
