@@ -47,4 +47,13 @@ sub subtests_AnyInSet_Excl() {
 	is($ret, 'lenny', 'AnyInSet returned lenny');
 }
 
+my %subtests_Syntax_args = ( );
+sub subtests_Syntax_setArgs(%) {
+	$subtests_Syntax_args = @_;
+}
+
+sub subtests_Syntax() {
+	Syntax('dummy', undef, %subtests_Syntax_args);
+}
+
 1;

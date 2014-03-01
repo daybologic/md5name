@@ -8,6 +8,7 @@ require 't/subtests.pl';
 package main;
 use Data::Dumper;
 use Test::More tests => 21;
+use Test::Output;
 
 sub t_GetExt() {
 	my %tData = (
@@ -45,10 +46,20 @@ sub t_AnyInSet() {
 	subtests_AnyInSet_Excl();
 }
 
+sub t_Syntax() {
+	subtests_Syntax_setArgs({ h => 1 });
+	stdout_is(
+		\&subtests_Syntax,
+		"Write out.\n",
+		'Syntax'
+	);
+}
+
 sub t_main() {
 	t_GetExt();
 	t_DisallowedExt();
 	t_AnyInSet();
+	t_Syntax();
 	return 0;
 }
 
