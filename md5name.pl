@@ -21,8 +21,7 @@ sub DisallowedExt($);
 sub GetExt($);
 sub Program($);
 
-sub Program($)
-{
+sub Program($) {
 	my $filename;
 	my $dirname = $_[0];
 	local *dirHandle;
@@ -68,8 +67,7 @@ sub Program($)
 	return;
 }
 
-sub GetExt($)
-{
+sub GetExt($) {
 	my $fn = $_[0];
 	my @arr;
 	my ( $fnMain, $ext );
@@ -81,16 +79,14 @@ sub GetExt($)
 	return ( $fnMain, $ext );
 }
 
-sub DisallowedExt($)
-{
+sub DisallowedExt($) {
 	my %disallowed = map { $_ => 1 } ( 'htaccess', 'dirsz', 'txt', 'DS_Store' );
 	my $ext = $_[0];
 	return 1 if ( $ext && $disallowed{$ext} );
 	return 0;
 }
 
-sub AnyInSet(@)
-{
+sub AnyInSet(@) {
 	my $ret = undef;
 	my %Params = ( );
 	my ( $Set, $Excl );
@@ -121,8 +117,7 @@ sub AnyInSet(@)
 	return $ret;
 }
 
-sub Syntax($$$)
-{
+sub Syntax($$$) {
 	my $xHelp;
 	my ( $AppName, $ArgList, $Args ) = @_;
 	my %overview = (
@@ -171,8 +166,7 @@ sub Syntax($$$)
 	}
 }
 
-sub getoptswrapper($$)
-{
+sub getoptswrapper($$) {
 	my ( $ret, $active ) = ( 0, 1 );
 	my @remaining = ( );
 	my ( $Args, $Opts ) = @_;
@@ -191,25 +185,29 @@ sub getoptswrapper($$)
 	return $ret;
 }
 
-# Program entry point
-getoptswrapper(ARG_LIST(), \%Opts);
-if ( $Opts{'?'} || $Opts{'h'} ) {
-	Syntax($0, ARG_LIST(), \%Opts);
-	exit(1);
-} else {
-	if ( $Opts{'S'} ) { # User-supplied salt?
-		if ( $Opts{'S'} =~ $RegexMD5 ) { # It's a direct MD5 sum
-			$UserSalt = $Opts{'S'};
-		} else {
-			my $user_salt_ctx = Digest::MD5->new;
-			$user_salt_ctx->add($Opts{'S'});
-			$UserSalt = $user_salt_ctx->hexdigest();
+sub main() {
+	getoptswrapper(ARG_LIST(), \%Opts);
+	if ( $Opts{'?'} || $Opts{'h'} ) {
+		Syntax($0, ARG_LIST(), \%Opts);
+		return 1;
+	} else {
+		if ( $Opts{'S'} ) { # User-supplied salt?
+			if ( $Opts{'S'} =~ $RegexMD5 ) { # It's a direct MD5 sum
+				$UserSalt = $Opts{'S'};
+			} else {
+				my $user_salt_ctx = Digest::MD5->new;
+				$user_salt_ctx->add($Opts{'S'});
+				$UserSalt = $user_salt_ctx->hexdigest();
+			}
 		}
+		if ( $ARGV[0] ) {
+			Program($ARGV[0]);
+			return 0;
+		}
+		printf(STDERR "%s: ERROR processing command-line arguments.\n", $0);
+		return 1;
 	}
-	if ( $ARGV[0] ) {
-		Program($ARGV[0]);
-		exit(0);
-	}
-	printf(STDERR "%s: ERROR processing command-line arguments.\n", $0);
-	exit(1);
 }
+
+exit(main()) unless (caller()); # Program entry point
+1;
