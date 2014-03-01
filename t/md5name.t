@@ -6,7 +6,7 @@ require 'md5name.pl';
 
 package main;
 use Data::Dumper;
-use Test::More tests => 3;
+use Test::More tests => 10;
 
 sub t_GetExt() {
 	my %tData = (
@@ -21,8 +21,25 @@ sub t_GetExt() {
 	}
 }
 
+sub t_DisallowedExt() {
+	my %tData = (
+		'something' => 0,
+		'htaccess'  => 1,
+		'dirsz'     => 1,
+		'txt'       => 1,
+		'DS_Store'  => 1,
+		''          => 0,
+		'undef'     => 0
+	);
+
+	while ( my ( $ext, $expect ) = each(%tData) ) {
+		is(DisallowedExt($ext), $expect, sprintf('DisallowedExt(\'%s\'): %u', $ext, $expect));
+	}
+}
+
 sub t_main() {
 	t_GetExt();
+	t_DisallowedExt();
 }
 
 exit(t_main()); # Entry into test routines
