@@ -7,7 +7,7 @@ require 't/subtests.pl';
 
 package main;
 use Data::Dumper;
-use Test::More tests => 21;
+use Test::More tests => 22;
 use Test::Output;
 
 sub t_GetExt() {
@@ -47,10 +47,10 @@ sub t_AnyInSet() {
 }
 
 sub t_Syntax() {
-	subtests_Syntax_setArgs({ h => 1 });
+	subtests_Syntax_setArgs(h => 1);
 	stdout_is(
 		\&subtests_Syntax,
-		"Write out.\n",
+		subtests_Syntax_get('all'),
 		'Syntax'
 	);
 }
