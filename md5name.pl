@@ -157,7 +157,7 @@ sub Syntax($$$) {
 	$xHelp = AnyInSet(Set => $Args, Excl => [ 'h', '?' ]);
 	print("\n");
 	if ( $xHelp ) {
-		printf("-%s:\n%s\n", $xHelp, $detail{$xHelp});
+		printf("-%s:\n%s\n", $xHelp, $detail{$xHelp}) if ( $detail{$xHelp} );
 	} else {
 		foreach my $o ( keys(%overview) ) {
 			my $visOpt = '-'.$o;

@@ -7,7 +7,7 @@ require 't/subtests.pl';
 
 package main;
 use Data::Dumper;
-use Test::More tests => 24;
+use Test::More tests => 28;
 use Test::Output;
 
 sub t_GetExt() {

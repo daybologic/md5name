@@ -55,6 +55,9 @@ sub subtests_Syntax_setArgs(%) {
 sub subtests_Syntax_get($) {
 	my $mode = shift;
 	my %syntax = (
+		'bad' =>
+			"dummy -S -? -n -h -q -x -s\n\n",
+
 		'all' =>
 			"dummy -S -? -n -h -q -x -s\n\n" .
 			"\t-S\n" .
@@ -105,7 +108,9 @@ sub subtests_Syntax_get($) {
 			"\tThis is a sensible default, but was not the default in version 1,\n" .
 			"\tPlease use it unless you need the verbose output.\n\n",
 	);
-	return $syntax{$mode};
+	my $ret = $syntax{$mode};
+	BAIL_OUT('No syntax known for ' . $mode) unless ( $ret );
+	return $ret;
 }
 
 sub subtests_Syntax() {
