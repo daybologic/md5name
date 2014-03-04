@@ -9,6 +9,7 @@ package main;
 use Data::Dumper;
 use Test::More tests => 28;
 use Test::Output;
+use Devel::Cover;
 
 sub t_GetExt() {
 	my %tData = (
