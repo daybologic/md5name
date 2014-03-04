@@ -47,25 +47,22 @@ sub t_AnyInSet() {
 }
 
 sub t_Syntax() {
-	subtests_Syntax_setArgs(h => 1);
-	stdout_is(
-		\&subtests_Syntax,
-		subtests_Syntax_get('all'),
-		'Syntax'
-	);
-	subtests_Syntax_setArgs(h => 1, S => 1);
-	stdout_is(
-		\&subtests_Syntax,
-		subtests_Syntax_get('S'),
-		'Syntax: S'
-	);
-	subtests_Syntax_setArgs(h => 1, n => 1);
-	stdout_is(
-		\&subtests_Syntax,
-		subtests_Syntax_get('n'),
-		'Syntax: n'
-	);
+	my %args = ( h => 1 );
+	my @opts = ( qw/all S n/ );
 
+	while ( my $opt = shift(@opts) ) {
+		my %theseArgs = %args;
+		my $allMode = 0;
+
+		$allMode++ if ( $opt eq 'all' );
+		$theseArgs{$opt} = 1 unless ( $allMode );
+		subtests_Syntax_setArgs(%theseArgs);
+		stdout_is(
+			\&subtests_Syntax,
+			subtests_Syntax_get($opt),
+			'Syntax: -h ' . (($allMode) ? ('') : ('-'.$opt))
+		);
+	}
 }
 
 sub t_main() {
