@@ -47,6 +47,11 @@ sub t_AnyInSet() {
 	subtests_AnyInSet_Excl();
 }
 
+sub t_getoptswrapper() {
+	my %optsOut;
+	getoptswrapper('abcd:e:f:?', \%optsOut, ('-d', 'darg', '--', '-?'));
+}
+
 sub t_Syntax() {
 	my %args = ( h => 1 );
 	my @opts = ( qw/all S n q x s bad/ );
@@ -71,6 +76,7 @@ sub t_main() {
 	t_DisallowedExt();
 	t_AnyInSet();
 	t_Syntax();
+	t_getoptswrapper();
 	return 0;
 }
 

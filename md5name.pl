@@ -167,12 +167,13 @@ sub Syntax($$$) {
 	}
 }
 
-sub getoptswrapper($$) {
+sub getoptswrapper($$@) {
 	my ( $ret, $active ) = ( 0, 1 );
 	my @remaining = ( );
-	my ( $Args, $Opts ) = @_;
+	my ( $Args, $Opts, @Unit_OR ) = @_;
 
 	# Do pre-rocessing to handle -?, which getopts() can't handle.
+	@ARGV = @Unit_OR if ( scalar(@Unit_OR) );
 	foreach my $o ( @ARGV ) {
 		$active = 0 if ( $active && $o eq '--' );
 		if ( $active && $o eq '-?' ) {
@@ -187,7 +188,7 @@ sub getoptswrapper($$) {
 }
 
 sub main() {
-	getoptswrapper(ARG_LIST(), \%Opts);
+	getoptswrapper(ARG_LIST(), \%Opts, undef);
 	if ( $Opts{'?'} || $Opts{'h'} ) {
 		Syntax($0, ARG_LIST(), \%Opts);
 		return 1;
