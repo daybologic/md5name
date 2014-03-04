@@ -70,7 +70,12 @@ sub subtests_Syntax_get($) {
 			"\t-s\n" .
 			"\t\tDon\'t say we\'re renaming files where the result would be the same\n"
 
-		, 'something else' => undef
+		, 'S' =>
+			"dummy -S -? -n -h -q -x -s\n\n" .
+			"-S:\n" .
+			"\tConsider a user-defined string (MD5'ed) or a direct MD5 string as part\n" .
+			"\tof the MD5 calculation.  This ensures that people cannot use a search engine\n" .
+			"\tto discover what the file is, if others hold a copy of the file.\n\n"
 
 	);
 	return $syntax{$mode};
