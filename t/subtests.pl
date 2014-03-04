@@ -82,8 +82,28 @@ sub subtests_Syntax_get($) {
 			"-n:\n" .
 			"\tWhen -n is specified, no operations are actually performed,\n" .
 			"\tThe output is not changed, so it is not possible to tell the difference\n" .
-			"\tbetween a real-run, and a no-op run.  Other flags are respected.\n\n"
+			"\tbetween a real-run, and a no-op run.  Other flags are respected.\n\n",
 
+		'q' =>
+			"dummy -S -? -n -h -q -x -s\n\n" .
+			"-q:\n" .
+			"\tNo output will be produced on stdout.  This is useful when running from\n" .
+			"\ta scheduled job.  Errors will still be produced on stderr.\n\n",
+
+		'x' =>
+			"dummy -S -? -n -h -q -x -s\n\n" .
+			"-x:\n" .
+			"\tAssume if a filename looks like an MD5 sum already, that it is,\n" .
+			"\tthis will lead to massive optimisation when regularly re-processing\n" .
+			"\ta large data set.  It is then recommended you very occasionally turn the\n" .
+			"\tflag off to pick up files which have incorrect checksums.\n\n",
+
+		's' =>
+			"dummy -S -? -n -h -q -x -s\n\n" .
+			"-s:\n" .
+			"\tSkip over rename operations when the filename would be the same.\n" .
+			"\tThis is a sensible default, but was not the default in version 1,\n" .
+			"\tPlease use it unless you need the verbose output.\n\n",
 	);
 	return $syntax{$mode};
 }

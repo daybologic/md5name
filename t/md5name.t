@@ -48,7 +48,7 @@ sub t_AnyInSet() {
 
 sub t_Syntax() {
 	my %args = ( h => 1 );
-	my @opts = ( qw/all S n/ );
+	my @opts = ( qw/all S n q x s bad/ );
 
 	while ( my $opt = shift(@opts) ) {
 		my %theseArgs = %args;
