@@ -4,6 +4,55 @@
 # in it to their MD5 sums.
 #
 
+package Config;
+use Config::IniFiles;
+use strict;
+use warnings;
+
+sub new {
+	my ($class, $args) = @_;
+
+	my $self = {
+		file => Config::IniFiles->new(-file => $args->{path}, -allowcontinue => 1),
+		excludedDirectories => undef,
+	};
+
+	return bless($self, $class);
+}
+
+sub excludedDirectories {
+	my ($self) = @_;
+
+	if (!defined($self->{excludedDirectories})) {
+		my $val = $self->{file}->val('exclude', 'dirs');
+
+		my @paths;
+		if ($val) {
+			@paths = split(m/\s+/, $val);
+		}
+
+		$self->{excludedDirectories} = \@paths;
+	}
+
+
+	return $self->{excludedDirectories};
+}
+
+sub isExcludedDirectory {
+	my ($self, $name) = @_;
+
+	my $match = 0;
+	my $dirNames = $self->excludedDirectories();
+	foreach my $dirName (@$dirNames) {
+		next if ($dirName ne $name);
+		$match++;
+		last;
+	}
+
+	return $match;
+}
+
+package main;
 use Digest::MD5;
 use Getopt::Std;
 
@@ -11,7 +60,7 @@ use strict;
 use warnings;
 use diagnostics;
 
-use constant ARG_LIST => 'hnqsxS:';
+use constant ARG_LIST => 'hnqsxS:C:';
 
 my %Opts = ( );
 my $RegexMD5 = qr/^[0-9a-f]{32}$/; # Matches MD5 sums
@@ -29,8 +78,10 @@ sub Program($) {
 		while ( $filename = readdir(dirHandle) ) {
 			if ( ($filename eq '.') or ($filename eq '..') ) { next; }
 			if ( -d ( $dirname . '/' . $filename ) ) {
-				print "Recalling Program($dirname/$filename)\n" unless ( $Opts{'q'} );
-				Program($dirname . '/' . $filename);
+				if (!$Opts{'C'} || !config($Opts{'C'})->isExcludedDirectory($filename)) {
+					print "Recalling Program($dirname/$filename)\n" unless ( $Opts{'q'} );
+					Program($dirname . '/' . $filename);
+				}
 			} else {
 				my $digest = undef; # The real digest via the MD5 algorithm
 				my ( $fnMain, $ext ) = GetExt($filename);
@@ -38,6 +89,9 @@ sub Program($) {
 				if ( $Opts{'x'} ) { # Use regexes to avoid MD5?
 					$digest = $fnMain if ( $fnMain =~ $RegexMD5 );
 				}
+
+				next if ( DisallowedExt($ext) );
+
 				if ( !$digest && open(my $fileHandle, '<', $dirname . '/' . $filename) ) {
 					my $ctx = Digest::MD5->new;
 
@@ -45,11 +99,13 @@ sub Program($) {
 					close($fileHandle);
 					$ctx->add($UserSalt) if ( $UserSalt );
 					$digest = $ctx->hexdigest;
+				} else {
+					next;
 				}
 
-				if ( !DisallowedExt($ext) ) {
+				{
 					my ( $a, $b );
-					$digest = $digest . '.' . $ext if ( $ext );
+					$digest = $digest . '.' . $ext if (defined($ext) && length($ext) > 0);
 					$a = "$dirname/$filename";
 					$b = "$dirname/$digest";
 					unless ( $Opts{'q'} ) {
@@ -81,7 +137,22 @@ sub GetExt($) {
 }
 
 sub DisallowedExt($) {
-	my %disallowed = map { $_ => 1 } ( 'htaccess', 'dirsz', 'txt', 'DS_Store' );
+	my %disallowed = map { $_ => 1 } (
+		'htaccess',
+		'dirsz',
+		'txt',
+		'DS_Store',
+		'VOB',
+		'BUP',
+		'IFO',
+		'css',
+		'js',
+		'trashinfo',
+		'html',
+		'htm',
+		'backup_id',
+	);
+
 	my $ext = $_[0];
 	return 1 if ( $ext && $disallowed{$ext} );
 	return 0;
@@ -128,7 +199,8 @@ sub Syntax($$$) {
 		'q' => 'Quiet, Do not output to stdout, only write errors on stderr',
 		's' => 'Don\'t say we\'re renaming files where the result would be the same',
 		'x' => 'Run regular expressions on filenames and skip matches',
-		'S' => 'Obfuscate filenames using a user-defined salt (MD5 or string)'
+		'S' => 'Obfuscate filenames using a user-defined salt (MD5 or string)',
+		'C' => 'Configuration file for extended and advanced options',
 	);
 	my %detail = (
 		'n' => "\tWhen -n is specified, no operations are actually performed,\n" .
@@ -146,6 +218,10 @@ sub Syntax($$$) {
 		       "\tthis will lead to massive optimisation when regularly re-processing\n" .
 		       "\ta large data set.  It is then recommended you very occasionally turn the\n" .
 		       "\tflag off to pick up files which have incorrect checksums.\n",
+
+		'C' => "\tUse a configuration file.  We don't look for a default for safety reasons\n" .
+		       "\tbecause if it had been deleted, we might massively change the filesystem\n" .
+		       "\terrorneously\n",
 
 		'S' => "\tConsider a user-defined string (MD5'ed) or a direct MD5 string as part\n" .
 		       "\tof the MD5 calculation.  This ensures that people cannot use a search engine\n" .
@@ -186,6 +262,13 @@ sub getoptswrapper($$) {
 	return $ret;
 }
 
+my $config = undef;
+sub config {
+	my ($configPath) = @_;
+	$config ||= Config->new({ path => $configPath });
+	return $config;
+}
+
 sub main() {
 	getoptswrapper(ARG_LIST(), \%Opts);
 	if ( $Opts{'?'} || $Opts{'h'} ) {
@@ -211,4 +294,5 @@ sub main() {
 }
 
 exit(main()) unless (caller()); # Program entry point
+
 1;
