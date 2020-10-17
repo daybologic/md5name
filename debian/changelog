@@ -1,18 +1,14 @@
 md5name (1.4.0) stable; urgency=medium
 
-  * Tue Feb 12 06:52:26 2013 +0000, 51c8b731ea33: Merge r/1 (1.3.0) into default
-  * Tue Feb 12 06:52:35 2013 +0000, a6ec6e242ebd: Merged default down into develop
   * Mon Jan 13 00:10:47 2014 +0000, 468382e6bd97: Added TODO file
   * Sat Mar 01 00:10:14 2014 +0000, 0c0b8c5eee3e: Cuddle function definitions
   * Sat Mar 01 00:12:15 2014 +0000, 7459e52b931a: Move the entrypoint into the main() function
   * Sat Mar 01 00:16:07 2014 +0000, 973a1328f714: Support unit tests by not calling main routine when there is a caller
   * Sat Mar 01 00:33:29 2014 +0000, bf4287168bea: GetExt() should return undef if sent undef
   * Sat Mar 01 15:05:25 2014 +0000, ca33464113d2: Added note about an unused argument
-  * Fri Oct 16 22:13:29 2020 +0000, e5a04d5c7122: Branch for skipping directories from config
   * Sat Oct 17 03:42:56 2020 +0000, 1729d81cf306: Added -C flag for config; Excluded directory logic
   * Sat Oct 17 03:44:41 2020 +0000, 77fdd106909c: Expanded hard-coded file extension exclusion list
   * Sat Oct 17 22:56:28 2020 +0000, 01e5950e6426: Added run-time dependency; libconfig-inifiles-perl
-  * Sat Oct 17 23:09:33 2020 +0000, a7d2a64e6b23: Merged f/202010-skip-via-config
 
  -- Duncan Ross Palmer <2e0eol@gmail.com>  Sat, 17 Oct 2020 23:11:56 +0000
 
