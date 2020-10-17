@@ -1,0 +1,7 @@
+We need the following features:
+
+  * hg support (hg mv, rather than a standard rename).
+    *  Auto-commit support for Hg.
+
+  * git support (git mv?, rather than a standard rename).
+    *  Auto-commit support for Git.
