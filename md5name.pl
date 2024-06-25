@@ -6,15 +6,18 @@
 
 package Config;
 use Config::IniFiles;
+use Readonly;
 use strict;
 use warnings;
+
+Readonly my @HARD_CODED => ('.git', '.hg');
 
 sub new {
 	my ($class, $args) = @_;
 
 	my $self = {
-		file => Config::IniFiles->new(-file => $args->{path}, -allowcontinue => 1),
-		excludedDirectories => undef,
+		file => $args->{path} ? Config::IniFiles->new(-file => $args->{path}, -allowcontinue => 1) : undef,
+		excludedDirectories => [ @HARD_CODED ],
 	};
 
 	return bless($self, $class);
@@ -23,15 +26,12 @@ sub new {
 sub excludedDirectories {
 	my ($self) = @_;
 
-	if (!defined($self->{excludedDirectories})) {
-		my $val = $self->{file}->val('exclude', 'dirs');
-
-		my @paths;
-		if ($val) {
-			@paths = split(m/\s+/, $val);
+	if (scalar(@{ $self->{excludedDirectories} }) == scalar(@HARD_CODED)) {
+		if (my $file = $self->{file}) {
+			my $val = $file->val('exclude', 'dirs');
+			my @paths = split(m/\s+/, $val) if ($val);
+			push(@{ $self->{excludedDirectories} }, @paths);
 		}
-
-		$self->{excludedDirectories} = \@paths;
 	}
 
 
@@ -78,7 +78,7 @@ sub Program($) {
 		while ( $filename = readdir(dirHandle) ) {
 			if ( ($filename eq '.') or ($filename eq '..') ) { next; }
 			if ( -d ( $dirname . '/' . $filename ) ) {
-				if (!$Opts{'C'} || !config($Opts{'C'})->isExcludedDirectory($filename)) {
+				if (!config($Opts{'C'})->isExcludedDirectory($filename)) {
 					print "Recalling Program($dirname/$filename)\n" unless ( $Opts{'q'} );
 					Program($dirname . '/' . $filename);
 				}
